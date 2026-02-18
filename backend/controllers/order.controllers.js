@@ -370,6 +370,24 @@ export const getDeliveryBoyAssignment = async (req, res) => {
     }
 }
 
+// Debug endpoint: returns raw assignments for the authenticated delivery boy
+export const debugDeliveryAssignments = async (req, res) => {
+    try {
+        const deliveryBoyId = req.userId
+        const assignments = await DeliveryAssignment.find({
+            brodcastedTo: deliveryBoyId
+        })
+            .populate('order')
+            .populate('shop')
+
+        console.log('debugDeliveryAssignments: returning', assignments.length)
+        return res.status(200).json({ count: assignments.length, assignments })
+    } catch (error) {
+        console.error('debugDeliveryAssignments error:', error)
+        return res.status(500).json({ message: `debug assignments error ${error}` })
+    }
+}
+
 
 export const acceptOrder = async (req, res) => {
     try {
