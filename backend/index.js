@@ -57,6 +57,12 @@ app.use(cors({
     credentials:true,
     methods:['GET','POST','PUT','DELETE','OPTIONS']
 }))
+
+// basic root URL so visiting the backend directly shows a message instead
+// of the default Express "Cannot GET /" error.
+app.get('/', (req, res) => {
+    res.send('Vingo backend is running');
+});
 app.use(express.json())
 app.use(cookieParser())
 app.use("/api/auth", authRouter)
