@@ -177,9 +177,9 @@ handleTodayDeliveries()
 availableAssignments.map((a,index)=>(
   <div className='border rounded-lg p-4 flex justify-between items-center' key={index}>
    <div>
-    <p className='text-sm font-semibold'>{a?.shopName}</p>
-    <p className='text-sm text-gray-500'><span className='font-semibold'>Delivery Address:</span> {a?.deliveryAddress.text}</p>
-<p className='text-xs text-gray-400'>{a.items.length} items | {a.subtotal}</p>
+    <p className='text-sm font-semibold'>{a?.shopName || 'Shop'}</p>
+    <p className='text-sm text-gray-500'><span className='font-semibold'>Delivery Address:</span> {a?.deliveryAddress?.text || 'N/A'}</p>
+<p className='text-xs text-gray-400'>{a?.items?.length || 0} items | {a?.subtotal || 0}</p>
    </div>
    <button className='bg-orange-500 text-white px-4 py-1 rounded-lg text-sm hover:bg-orange-600' onClick={()=>acceptOrder(a.assignmentId)}>Accept</button>
 
@@ -192,9 +192,9 @@ availableAssignments.map((a,index)=>(
 {currentOrder && <div className='bg-white rounded-2xl p-5 shadow-md w-[90%] border border-orange-100'>
 <h2 className='text-lg font-bold mb-3'>📦Current Order</h2>
 <div className='border rounded-lg p-4 mb-3'>
-  <p className='font-semibold text-sm'>{currentOrder?.shopOrder.shop.name}</p>
-  <p className='text-sm text-gray-500'>{currentOrder.deliveryAddress.text}</p>
- <p className='text-xs text-gray-400'>{currentOrder.shopOrder.shopOrderItems.length} items | {currentOrder.shopOrder.subtotal}</p>
+  <p className='font-semibold text-sm'>{currentOrder?.shopOrder?.shop?.name || ''}</p>
+  <p className='text-sm text-gray-500'>{currentOrder?.deliveryAddress?.text || ''}</p>
+ <p className='text-xs text-gray-400'>{currentOrder?.shopOrder?.shopOrderItems?.length || 0} items | {currentOrder?.shopOrder?.subtotal || 0}</p>
 </div>
 
  <DeliveryBoyTracking data={{ 
