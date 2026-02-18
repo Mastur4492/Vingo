@@ -24,7 +24,8 @@ import Shop from './pages/Shop'
 import { useEffect } from 'react'
 import { io } from 'socket.io-client'
 import { setSocket } from './redux/userSlice'
-import { serverUrl } from './config/serverConfig'
+// backend URL can be overridden via environment variable; see frontend/.env
+export const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:8000";
 function App() {
     const {userData}=useSelector(state=>state.user)
     const dispatch=useDispatch()
