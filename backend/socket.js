@@ -2,7 +2,7 @@ import User from "./models/user.model.js"
 
 export const socketHandler = (io) => {
   io.on('connection', (socket) => {
-    console.log(socket.id)
+    console.log('socket connected:', socket.id, 'handshake headers:', socket.handshake.headers && {origin: socket.handshake.headers.origin, cookie: socket.handshake.headers.cookie})
     socket.on('identity', async ({ userId }) => {
       try {
         const user = await User.findByIdAndUpdate(userId, {
