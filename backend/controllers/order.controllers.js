@@ -343,17 +343,29 @@ export const getDeliveryBoyAssignment = async (req, res) => {
             .populate("order")
             .populate("shop")
 
-        const formated = assignments.map(a => ({
-            assignmentId: a._id,
-            orderId: a.order._id,
-            shopName: a.shop.name,
-            deliveryAddress: a.order.deliveryAddress,
-            items: a.order.shopOrders.find(so => so._id.equals(a.shopOrderId)).shopOrderItems || [],
-            subtotal: a.order.shopOrders.find(so => so._id.equals(a.shopOrderId))?.subtotal
-        }))
+        const formated = assignments.map(a => {
+            const shopOrder = (a.order && a.order.shopOrders) ? a.order.shopOrders.find(so => {
+                try {
+                    if (so._id && a.shopOrderId && so._id.equals) return so._id.equals(a.shopOrderId)
+                    return String(so._id) === String(a.shopOrderId)
+                } catch (e) {
+                    return false
+                }
+            }) : null
+
+            return {
+                assignmentId: a._id,
+                orderId: a.order?._id,
+                shopName: a.shop?.name,
+                deliveryAddress: a.order?.deliveryAddress,
+                items: shopOrder?.shopOrderItems || [],
+                subtotal: shopOrder?.subtotal || 0
+            }
+        })
 
         return res.status(200).json(formated)
     } catch (error) {
+        console.error('getDeliveryBoyAssignment error:', error)
         return res.status(500).json({ message: `get Assignment error ${error}` })
     }
 }
@@ -454,7 +466,8 @@ export const getCurrentOrder = async (req, res) => {
 
 
     } catch (error) {
-
+        console.error('getCurrentOrder error:', error)
+        return res.status(500).json({ message: `get current order error ${error}` })
     }
 }
 
