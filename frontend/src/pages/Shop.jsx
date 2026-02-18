@@ -18,6 +18,7 @@ useEffect(()=>{
            const result=await axios.get(`${serverUrl}/api/item/get-by-shop/${shopId}`,{withCredentials:true}) 
            setShop(result.data.shop)
            setItems(result.data.items)
+           console.log('fetched shop items', result.data.items)
         } catch (error) {
             console.log(error)
         }
@@ -49,7 +50,7 @@ useEffect(()=>{
 {items.length>0?(
     <div className='flex flex-wrap justify-center gap-8'>
         {items.map((item)=>(
-            <FoodCard data={item}/>
+            <FoodCard key={item._id || item.id} data={item}/>
         ))}
     </div>
 ):<p className='text-center text-gray-500 text-lg'>No Items Available</p>}
