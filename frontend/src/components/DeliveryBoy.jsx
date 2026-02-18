@@ -13,7 +13,7 @@ function DeliveryBoy() {
   const {userData,socket}=useSelector(state=>state.user)
   const [currentOrder,setCurrentOrder]=useState()
   const [showOtpBox,setShowOtpBox]=useState(false)
-  const [availableAssignments,setAvailableAssignments]=useState(null)
+  const [availableAssignments,setAvailableAssignments]=useState([])
   const [otp,setOtp]=useState("")
   const [todayDeliveries,setTodayDeliveries]=useState([])
 const [deliveryBoyLocation,setDeliveryBoyLocation]=useState(null)
@@ -85,7 +85,13 @@ const totalEarning=todayDeliveries.reduce((sum,d)=>sum + d.count*ratePerDelivery
 
   useEffect(()=>{
     socket.on('newAssignment',(data)=>{
-      setAvailableAssignments(prev=>([...prev,data]))
+      setAvailableAssignments(prev=>{
+        const arr = Array.isArray(prev)?[...prev]:[]
+        if(!arr.some(a=>String(a.assignmentId)===String(data.assignmentId))){
+          arr.push(data)
+        }
+        return arr
+      })
     })
     return ()=>{
       socket.off('newAssignment')
