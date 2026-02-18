@@ -8,11 +8,20 @@ const uploadOnCloudinary = async (file) => {
     });
     try {
         const result = await cloudinary.uploader.upload(file)
-        fs.unlinkSync(file)
+        try{
+            if (fs.existsSync(file)) fs.unlinkSync(file)
+        }catch(e){
+            console.log('error removing temp file', e)
+        }
         return result.secure_url
     } catch (error) {
-        fs.unlinkSync(file)
-        console.log(error)
+        try{
+            if (file && fs.existsSync(file)) fs.unlinkSync(file)
+        }catch(e){
+            console.log('error removing temp file after upload failure', e)
+        }
+        console.error('cloudinary upload error:', error)
+        throw error
     }
 }
 
